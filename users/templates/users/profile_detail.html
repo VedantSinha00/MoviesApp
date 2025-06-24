@@ -1,0 +1,22 @@
+{% extends "movies/base.html" %} {% load crispy_forms_tags %} {% block content %}
+<nav aria-label="breadcrumb" class="bg-dark-subtle text-dark-emphasis">
+	<ol class="breadcrumb p-2 pl-4">
+	  <li class="breadcrumb-item "><a href="/" class="link-underline link-underline-opacity-0">Home</a></li>
+	  <li class="breadcrumb-item active" aria-current="page">Profile</li>
+	</ol>
+  </nav>
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %} {% endif %}
+<div class="container w-50 mt-5">
+    <div class="content-section">
+    <div class="media d-flex align-items-center">
+        <img class="rounded-circle account-img" src="{{ profile.image.url }}">
+        <div class="media-body">
+          <h2 class="account-heading text-dark">{{ profile.user.username }}</h2>
+          <p class="text-secondary">{{ profile.user.email }}</p>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% extends "movies/base.html" %} {% block content %}
+<nav aria-label="breadcrumb" class="bg-dark-subtle text-dark-emphasis">
+	<ol class="breadcrumb p-2 pl-4">
+	  <li class="breadcrumb-item "><a href="/" class="link-underline link-underline-opacity-0">Home</a></li>
+	  <li class="breadcrumb-item active" aria-current="page">Delete Movie</li>
+	</ol>
+  </nav>
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %} {% endif %}
+<div class="container mt-5 w-50">
+<div class="content-section bg-light p-4 rounded mb-5">
+	<form method="POST" >
+		{% csrf_token %}
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">Delete Movie</legend>
+            <h2>Are you sure you want to delete the movie "{{ object.title }}"?</h2>
+		</fieldset>
+		<div class="form-group  mt-4 mb-3">
+			<button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+            <a href="{% url 'movie_detail' object.id %}" class="btn btn-outline-secondary">No, Go Back</a>
+		</div>
+	</form>
+</div>
+</div>
+{% endblock content %}

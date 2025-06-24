@@ -1,0 +1,90 @@
+{% extends "movies/base.html" %} {% block content %}
+<nav aria-label="breadcrumb" class="bg-dark-subtle text-dark-emphasis">
+	<ol class="breadcrumb p-2 pl-4">
+	  <li class="breadcrumb-item"><a href="{% url 'movies-home' %}" class="link-underline link-underline-opacity-0">Home</a></li>
+	  <li class="breadcrumb-item active" aria-current="page">{{movie.title}}</li>
+	</ol>
+  </nav>
+<div class="container mt-5 mb-5">
+	<div class="card no-border text-bg-dark">
+		<div class="row g-4">
+			<div class="col-md-4">
+				<img src="{{movie.poster.url}}" class="img-fluid rounded" alt="..." />
+			</div>
+			<div class="col-md-8 text-bg-dark">
+				<div class="card-body">
+					<h1 class="card-title">{{movie.title}}</h1>
+					<figcaption class="blockquote-footer mt-2 fs-5">
+						<div>
+							Directed By <cite title="Source Title">{{movie.director}}</cite>
+						</div>
+						<div>
+							Released on <cite title="Source Title">{{movie.release}}</cite>
+						</div>
+					</figcaption>
+					<button
+						type="button"
+						class="btn btn-outline-secondary"
+						style="
+							--bs-btn-padding-y: 0.25rem;
+							--bs-btn-padding-x: 0.5rem;
+							--bs-btn-font-size: 0.75rem;
+						"
+					>
+						{{movie.genre}}
+					</button>
+					<p class="card-text mt-4 fs-5">{{movie.description}}</p>
+					
+					<figcaption class="blockquote-footer mt-2 fs-5">{% if movie.user == user %}
+						<div>
+							Post by <cite title="Source Title"><a class="mr-2 link-underline link-underline-opacity-0" href="{% url 'profile' %}">{{movie.user}}</a></cite>
+						</div>
+						  {% else %}
+						  <div>
+							Post by <cite title="Source Title"><a class="mr-2 link-underline link-underline-opacity-0" href="{% url 'profile_detail' movie.user.id %}">{{movie.user}}</a></cite>
+						</div>
+						{% endif %}
+					</figcaption>
+
+					{% if object.user == user %}
+					<a href="{% url 'movie-update' object.id %}" class="btn btn-secondary btn-sm rounded-3 me-1">Update</a>
+					<a href="{% url 'movie-delete' object.id %}" class="btn btn-danger btn-sm rounded-3">Delete</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="text-bg-dark border-top mt-4 pt-3">
+		<div class="d-flex justify-content-between align-items-center" >
+			<h2 class="mb-3">Reviews</h2>
+			<a href="{% url 'review-create' object.id%}" class="link-underline link-underline-opacity-0 text-info"><h5>Add Review</h5></a>
+		</div>
+		{% for review in reviews %}
+        <article class="media content-section d-flex">
+          <img class="rounded-circle review-img" src="{{ review.user.profile.image.url }}">
+          <div class="media-body flex-grow-1">
+            <div class="article-metadata d-flex justify-content-between">
+				{% if review.user == user %}
+              <a class="mr-2 link-underline link-underline-opacity-0" href="{% url 'profile' %}">{{ review.user }} - {{ review.rating }}/5</a>
+				{% else %}
+				<a class="mr-2 link-underline link-underline-opacity-0" href="{% url 'profile_detail' review.user.profile.id %}">{{ review.user }} - {{ review.rating }}/5</a>
+				{% endif %}
+				
+				
+              <small class="text-muted">
+				{% if review.user == user %}
+				<a class="me-2 link-underline link-underline-opacity-0 " href="{% url 'review-update' review.id %}">Update</a>
+				<a class="me-2 link-underline link-underline-opacity-0 text-danger" href="{% url 'review-delete' review.id %}">Delete</a>
+				{% endif %}
+				<span>{{ review.created|date:"F d, Y" }}</span>
+			</small>
+            </div>
+			<div class="d-flex">
+            <div class="article-content text-dark">{{ review.comment }}</div>
+		</div>
+          </div>
+        </article>
+    {% endfor %}
+	</div>
+</div>
+{% endblock %}
